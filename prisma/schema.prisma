@@ -1,0 +1,296 @@
+// Prisma schema for NORTHLINK AI
+// Smart Logistics & Accessibility Intelligence Platform for North Eastern Region (NER)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  FIELD_OFFICER
+  LOGISTICS_MANAGER
+  DRIVER
+  VIEWER
+}
+
+enum IncidentType {
+  LANDSLIDE
+  FLOOD
+  HEAVY_RAINFALL
+  ROAD_DAMAGE
+  BRIDGE_DAMAGE
+  TRAFFIC
+  OTHER
+}
+
+enum Severity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum IncidentStatus {
+  ACTIVE
+  INVESTIGATING
+  MITIGATED
+  RESOLVED
+}
+
+enum AccessibilityStatus {
+  OPEN
+  RESTRICTED
+  BLOCKED
+  CRITICAL_RISK
+}
+
+enum CommodityType {
+  MEDICINES
+  FOOD
+  AGRICULTURAL_PRODUCE
+  CONSTRUCTION_MATERIALS
+  EMERGENCY_SUPPLIES
+}
+
+enum Priority {
+  CRITICAL
+  HIGH
+  STANDARD
+  LOW
+}
+
+enum ShipmentStatus {
+  PLANNED
+  IN_TRANSIT
+  DELAYED
+  DELIVERED
+  CANCELLED
+}
+
+enum VehicleStatus {
+  IN_TRANSIT
+  IDLE
+  MAINTENANCE
+  DIVERTED
+}
+
+enum VehicleType {
+  HEAVY_TRUCK
+  MEDIUM_CARGO
+  COLD_CHAIN_VAN
+  EMERGENCY_4X4
+}
+
+enum SyncStatus {
+  SYNCED
+  PENDING_SYNC
+  FAILED
+}
+
+model User {
+  id                String         @id @default(cuid())
+  name              String
+  email             String         @unique
+  passwordHash      String
+  role              Role           @default(VIEWER)
+  preferredLanguage String         @default("en")
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  fieldReports      FieldReport[]
+  assignedShipments Shipment[]
+
+  @@index([role])
+}
+
+model District {
+  id              String         @id @default(cuid())
+  name            String         @unique
+  state           String         // Assam, Meghalaya, Manipur, Mizoram, Nagaland, Tripura, Arunachal Pradesh, Sikkim
+  districtCode    String         @unique
+  latitude        Float
+  longitude       Float
+  boundaryGeoJson String?        @db.Text
+  createdAt       DateTime       @default(now())
+  incidents       Incident[]
+  originRoutes    Route[]        @relation("OriginDistrict")
+  destRoutes      Route[]        @relation("DestinationDistrict")
+
+  @@index([state])
+}
+
+model RoadSegment {
+  id                  String              @id @default(cuid())
+  name                String
+  highwayNumber       String              // e.g., NH-27, NH-6, NH-2, NH-10
+  source              String
+  destination         String
+  roadType            String              // National Highway, State Highway, Hill Pass
+  accessibilityStatus AccessibilityStatus @default(OPEN)
+  riskLevel           Severity            @default(LOW)
+  averageTravelTime   Int                 // In minutes
+  coordinatesGeoJson  String              @db.Text // Polyline GeoJSON coordinates
+  lastUpdated         DateTime            @default(now())
+  incidents           Incident[]
+
+  @@index([highwayNumber])
+  @@index([accessibilityStatus])
+}
+
+model Incident {
+  id            String         @id @default(cuid())
+  title         String
+  description   String         @db.Text
+  incidentType  IncidentType
+  severity      Severity       @default(MEDIUM)
+  latitude      Float
+  longitude     Float
+  locationName  String?
+  districtId    String?
+  district      District?      @relation(fields: [districtId], references: [id])
+  roadSegmentId String?
+  roadSegment   RoadSegment?   @relation(fields: [roadSegmentId], references: [id])
+  reportedBy    String?
+  imageUrl      String?
+  status        IncidentStatus @default(ACTIVE)
+  reportedAt    DateTime       @default(now())
+  resolvedAt    DateTime?
+  alerts        Alert[]
+  fieldReports  FieldReport[]
+
+  @@index([incidentType])
+  @@index([severity])
+  @@index([status])
+}
+
+model Route {
+  id                  String                 @id @default(cuid())
+  name                String
+  origin              String
+  destination         String
+  originDistrictId    String?
+  originDistrict      District?              @relation("OriginDistrict", fields: [originDistrictId], references: [id])
+  destDistrictId      String?
+  destDistrict        District?              @relation("DestinationDistrict", fields: [destDistrictId], references: [id])
+  distance            Float                  // in km
+  estimatedDuration   Int                    // in minutes
+  riskScore           Float                  @default(0) // 0 - 100
+  routeStatus         AccessibilityStatus    @default(OPEN)
+  coordinatesGeoJson  String                 @db.Text // Full route polyline
+  alternativeRouteId  String?
+  createdAt           DateTime               @default(now())
+  assessments         RouteRiskAssessment[]
+  shipments           Shipment[]
+
+  @@index([origin, destination])
+}
+
+model RouteRiskAssessment {
+  id                    String    @id @default(cuid())
+  routeId               String
+  route                 Route     @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  riskScore             Float     // 0 - 100
+  riskCategory          Severity
+  disruptionProbability Float     // 0.0 - 1.0
+  predictedDelay        Int       // In minutes
+  contributingFactors   String    @db.Text // JSON string of factors (landslide, flood, gradient, weather)
+  modelVersion          String    @default("NER-RiskEngine-v1.4")
+  assessedAt            DateTime  @default(now())
+
+  @@index([routeId])
+}
+
+model Vehicle {
+  id                  String                   @id @default(cuid())
+  vehicleNumber       String                   @unique
+  driverName          String
+  driverPhone         String
+  vehicleType         VehicleType              @default(MEDIUM_CARGO)
+  currentLatitude     Float
+  currentLongitude    Float
+  speed               Float                    @default(0)
+  status              VehicleStatus            @default(IDLE)
+  batteryOrFuel       Int                      @default(85)
+  lastUpdated         DateTime                 @default(now())
+  shipments           Shipment[]
+  locationHistory     VehicleLocationHistory[]
+
+  @@index([status])
+}
+
+model Shipment {
+  id                  String         @id @default(cuid())
+  trackingNumber      String         @unique
+  commodityType       CommodityType
+  priority            Priority       @default(HIGH)
+  origin              String
+  destination         String
+  vehicleId           String?
+  vehicle             Vehicle?       @relation(fields: [vehicleId], references: [id])
+  routeId             String?
+  route               Route?         @relation(fields: [routeId], references: [id])
+  assignedUserId      String?
+  assignedUser        User?          @relation(fields: [assignedUserId], references: [id])
+  status              ShipmentStatus @default(IN_TRANSIT)
+  expectedDeliveryTime DateTime
+  actualDeliveryTime  DateTime?
+  delayMinutes        Int            @default(0)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  @@index([trackingNumber])
+  @@index([status])
+  @@index([commodityType])
+}
+
+model VehicleLocationHistory {
+  id          String   @id @default(cuid())
+  vehicleId   String
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  latitude    Float
+  longitude   Float
+  speed       Float
+  recordedAt  DateTime @default(now())
+
+  @@index([vehicleId, recordedAt])
+}
+
+model Alert {
+  id              String    @id @default(cuid())
+  title           String
+  message         String    @db.Text
+  severity        Severity  @default(HIGH)
+  affectedRegion  String
+  incidentId      String?
+  incident        Incident? @relation(fields: [incidentId], references: [id])
+  status          String    @default("ACTIVE") // ACTIVE, READ, RESOLVED
+  translations    String?   @db.Text // JSON with translated strings for hi, as, bn, mni
+  createdAt       DateTime  @default(now())
+
+  @@index([severity])
+  @@index([status])
+}
+
+model FieldReport {
+  id            String     @id @default(cuid())
+  reporterId    String?
+  reporter      User?      @relation(fields: [reporterId], references: [id])
+  reporterName  String
+  incidentType  IncidentType
+  severity      Severity   @default(HIGH)
+  description   String     @db.Text
+  latitude      Float
+  longitude     Float
+  locationName  String?
+  incidentId    String?
+  incident      Incident?  @relation(fields: [incidentId], references: [id])
+  imageAttachment String?  @db.Text
+  syncStatus    SyncStatus @default(SYNCED)
+  createdAt     DateTime   @default(now())
+
+  @@index([syncStatus])
+}
