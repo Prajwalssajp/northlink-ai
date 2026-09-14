@@ -30,20 +30,41 @@ When critical arteries like **NH-6 (Meghalaya–Barak Valley lifeline)** or **NH
 
 ---
 
-## ⚡ 3. Quick Start & Local Setup (Windows PowerShell)
+## ⚡ 3. Quick Start & Setup on Any Device (Windows, Mac, Linux)
 
 ### Prerequisites
-- Node.js >= 18 (Node v22 installed)
-- npm or pnpm
-- (Optional) Docker Desktop with WSL2 for PostgreSQL/PostGIS
+- **Node.js**: v18.0.0 or higher (v20+ recommended)
+- **Git**: Installed on your system
+- **Package Manager**: `npm` (comes with Node) or `pnpm` / `yarn`
+- *(Optional)* **Docker Desktop** for PostgreSQL + PostGIS (the platform includes an automated in-memory fallback adapter that runs out of the box with zero external database setup).
 
-### 1. Navigate to Project
-```powershell
-cd "C:\Users\Prajwal ss\.gemini\antigravity\scratch\northlink-ai"
+---
+
+### Step-by-Step Installation
+
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/Prajwalssajp/northlink-ai.git
+cd northlink-ai
 ```
 
-### 2. Environment Variables
-Check `.env` (pre-configured with defaults):
+#### 2. Install Dependencies
+```bash
+npm install
+```
+
+#### 3. Configure Environment Variables
+Create a `.env` file in the root directory (or copy from `.env.example`):
+- **Windows (PowerShell)**:
+  ```powershell
+  Copy-Item .env.example .env
+  ```
+- **macOS / Linux**:
+  ```bash
+  cp .env.example .env
+  ```
+
+Sample `.env` contents:
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/northlink_db?schema=public"
 JWT_SECRET="northlink-ner-secure-jwt-key-hackathon-2026-09"
@@ -51,23 +72,30 @@ PORT=3000
 NODE_ENV="development"
 NEXT_PUBLIC_DEMO_MODE="true"
 ```
+*(Note: If PostgreSQL is not active, NorthLink AI automatically utilizes its high-performance in-memory fallback store with full NER seed data, so you can test immediately with zero database configuration!)*
 
-### 3. (Optional) Start PostgreSQL + PostGIS via Docker
-```powershell
+#### 4. (Optional) Run Database via Docker
+If you have Docker Desktop and want live PostGIS:
+```bash
 npm run docker:up
-```
-
-### 4. Prisma Setup & Database Seeding
-```powershell
 npm run prisma:generate
 npm run db:seed
 ```
 
-### 5. Launch the Application
-```powershell
-npm run dev
-```
-Open **`http://localhost:3000`** in your browser.
+#### 5. Launch the Application
+- **Development Mode**:
+  ```bash
+  npm run dev
+  ```
+- **Production Mode (Recommended for Demos)**:
+  ```bash
+  npm run build
+  npm run start
+  ```
+
+#### 6. Access in Browser
+- Local machine: **`http://localhost:3000`**
+- On another device on the same Wi-Fi / Local Network: **`http://<YOUR_LOCAL_IP>:3000`**
 
 ---
 
