@@ -11,8 +11,7 @@ import {
   FileText, 
   Sparkles, 
   ArrowRight,
-  ShieldAlert,
-  Activity
+  ShieldAlert
 } from 'lucide-react';
 import Link from 'next/link';
 import KpiCards from '@/components/dashboard/KpiCards';
@@ -198,32 +197,6 @@ export default function DashboardOverviewPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <RecentIncidents incidents={incidents} loading={loading} />
         <EssentialGoodsFeed shipments={shipments} loading={loading} />
-      </div>
-
-      {/* Demo Workflow Assistant Guide for Hackathon Judges */}
-      <div className="rounded-xl border border-cyan-900/60 bg-gradient-to-r from-cyan-950/30 via-slate-900/60 to-slate-950 p-4">
-        <div className="flex items-center space-x-2 text-xs font-bold text-cyan-400">
-          <Activity className="h-4 w-4" />
-          <span>HACKATHON JURY QUICK DEMO FLOW (3-5 MINUTES)</span>
-        </div>
-        <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-4 text-xs text-slate-300">
-          <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5">
-            <span className="font-bold text-cyan-400">1. Inspect Dashboard</span>
-            <p className="mt-1 text-[11px] text-slate-400">View real-time KPI metrics, active landslides on NH-6 & Teesta, and vehicle positions across 8 NER states.</p>
-          </div>
-          <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5">
-            <span className="font-bold text-cyan-400">2. AI Route Rerouting</span>
-            <p className="mt-1 text-[11px] text-slate-400">Go to Route Intelligence. Select Medicine convoy from Guwahati to Silchar. See AI detect NH-6 block and recommend NH-27 Lumding bypass.</p>
-          </div>
-          <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5">
-            <span className="font-bold text-cyan-400">3. Live GPS & Offline Field Report</span>
-            <p className="mt-1 text-[11px] text-slate-400">Inspect simulated vehicle motion in Logistics. Submit an offline field report with GPS coordinates and observe auto-sync.</p>
-          </div>
-          <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5">
-            <span className="font-bold text-cyan-400">4. Multilingual Emergency Alerts</span>
-            <p className="mt-1 text-[11px] text-slate-400">Visit Alerts Center. Toggle between English, Assamese, Bengali, Manipuri, and Hindi to test disaster inclusivity.</p>
-          </div>
-        </div>
       </div>
     </div>
   );
