@@ -11,11 +11,17 @@ When critical arteries like **NH-6 (Meghalaya–Barak Valley lifeline)** or **NH
 
 **NORTHLINK AI** is an intelligent, command-center platform engineered to bridge this infrastructure vulnerability through:
 1. **Real-Time GIS Accessibility Grid**: Multi-layer interactive map of 8 NER states showing open, restricted, and severed transport corridors.
-2. **AI Route Intelligence Engine**: Transparent, explainable multi-factor predictive model assessing landslide proximity, river inundation, rainfall indices, road structural health, and slope gradient.
+2. **AI Route Intelligence Engine**: Transparent, explainable Random Forest ML predictive model assessing landslide proximity, river inundation, rainfall indices, road structural health, and slope gradient.
 3. **Strategic Alternative Bypass Rerouting**: Evaluates alternative hill bypasses (e.g., bypassing NH-6 Sonapur landslide via NH-27 Lumding–Haflong link), calculating delay hours avoided and net safety gains.
-4. **GPS Fleet & Cold-Chain Telemetry**: Live tracking of emergency convoys with simulated real-time movement and delivery timeline milestones.
-5. **Offline-First Field Reporting**: Resilient browser-cached submission protocol for field officers operating in zero-connectivity mountain valleys with auto-sync.
-6. **Multilingual Emergency Alerts**: Early-warning advisories in English, Assamese (অসমীয়া), Bengali (বাংলা), Hindi (हिंदी), and Manipuri (মৈতৈলোন্).
+4. **📸 Computer Vision Road Hazard & Landslide Scanner**: Instant volumetric debris calculation ($m^3$), road blockage %, and heavy machinery deployment recommendations from drone or field camera photos.
+5. **🧊 IoT Cold-Chain Sensor Telemetry**: Live temperature, humidity, compressor health, and dynamic spoilage countdown timers for sensitive medical and vaccine convoys.
+6. **🚁 Aerial Relief & Drone Corridors**: IAF / BRO Forward Operating Base air-drop corridors for emergency relief into cut-off mountain valleys.
+7. **📄 1-Click Official NDMA / BRO Dispatch Manifest PDF**: Print-ready official Government of India disaster transit certificates with cryptographic QR verification.
+8. **🔊 Voice Audio Road Guidance Assistant**: Hands-free Web Speech API tactical road advisories for drivers navigating fog, rain, or landslide zones.
+9. **🌦️ Live IMD Doppler Weather Radar Overlay**: Geospatial storm-cell simulation displaying precipitation intensity (mm/h) across the Eastern Himalayas.
+10. **📲 Low-Bandwidth Satellite SMS & WhatsApp Dispatch**: 160-character satellite SMS broadcast simulator and WhatsApp dispatch for zero-connectivity 2G mountain pockets.
+11. **Offline-First Field Reporting**: Resilient browser-cached submission protocol for field officers operating in zero-connectivity mountain valleys with auto-sync.
+12. **Multilingual Emergency Alerts**: Early-warning advisories in English, Assamese (অসমীয়া), Bengali (বাংলা), Hindi (हिंदी), and Manipuri (মৈতৈলোন্).
 
 ---
 
@@ -109,28 +115,36 @@ Follow this structured workflow during jury evaluation:
    - Highlight the embedded GIS Regional Map showing active landslides at Sonapur Tunnel and flood breach at Teesta River.
 
 2. **AI Route Intelligence (`/route-intelligence`)**:
-   - Select the preset: **Guwahati to Silchar (NH-6 Landslide Vulnerability)**.
-   - Select Commodity: **MEDICINES (Cold-Chain Life Saving)**.
-   - Click **"Analyze"**.
-   - Observe the AI engine detect the catastrophic Sonapur Tunnel landslide on NH-6 (Risk: 88/100, CRITICAL, +4.5 hours delay).
-   - Show the AI recommendation: **NH-27 Lumding–Haflong bypass** (Risk: 32/100, LOW), saving ~4.5 hours and ensuring cold-chain integrity.
-   - Click **"Configurable Scoring Weights"** to demonstrate transparent factor weight tuning (Landslides, Floods, Rainfall, Roadbed).
+   - Select preset: **Guwahati to Silchar (NH-6 Landslide Vulnerability)** with Commodity **MEDICINES**.
+   - Click **"Analyze"** — view Random Forest tree ensemble consensus (85%+ votes for bypass), delay avoided (~4.5 hrs), and safety gain (+64%).
+   - Click **"Listen Voice Guidance"** 🔊 — Web Speech API speaks tactical navigation instructions hands-free.
+   - Click **"NDMA Manifest PDF"** 📄 — opens print-ready official NDMA/BRO Disaster Transit Certificate with QR code and escort pass.
+   - Click **"Broadcast Reroute SMS"** 📲 — launches Satellite SMS simulator with 160-char counter and 1-click WhatsApp dispatch.
 
-3. **Live GIS Map & Spatial Inspector (`/live-map`)**:
-   - Filter by State (e.g. "Meghalaya" or "Sikkim") and Incident Type.
-   - Click on any red landslide or green corridor to inspect the feature in the side drawer.
+3. **Computer Vision Road Hazard Scanner (`/hazard-scanner`)**:
+   - Click any preset image (Sonapur Landslide, Teesta Flash Flood, Haflong Cliff Slump) or upload a photo.
+   - Click **"Run Computer Vision Hazard Analysis"**.
+   - Review AI estimates: Volumetric debris ($1,450 m^3$), Road blockage (85%), Road clearance time (~6.5 hrs).
+   - View recommended heavy machinery detachment (e.g. 2x JCB-3DX Backhoe, 1x 20T Hydraulic Excavator).
+   - Click **"Broadcast Audio Advisory"** or **"Dispatch to Regional Incident Grid"**.
 
-4. **Logistics & GPS Fleet Tracking (`/logistics`)**:
-   - Inspect active medicine shipment `NL-MED-2026-0901`.
-   - Click **"Inspect Timeline"** to view milestone progression.
-   - Observe the live GPS Simulation pill in the top header actively updating vehicle coordinates.
+4. **Live GIS Map, Doppler Radar & Drone Corridors (`/live-map`)**:
+   - Click **"Doppler Radar"** toggle 🌦️: view animated IMD precipitation storm cells and rain intensity (mm/h).
+   - Click **"Drone Corridors"** toggle 🚁: inspect IAF Kumbhirgram, BRO Haflong, and NDRF Tezpur aerial relief flight bridges for cut-off mountain valleys.
+   - Filter by State or Incident Type; click any corridor or hazard to inspect real-time telemetry.
 
-5. **Offline-First Field Officer Reporting (`/field-reports`)**:
+5. **Logistics & Cold-Chain IoT Telemetry (`/logistics`)**:
+   - View live IoT Cold-Chain sensor readouts (Temperature -18.4°C, Humidity 42%, Compressor RUNNING, Battery 94%).
+   - Observe the **Spoilage Countdown Risk Calculator** (e.g., "Critical Spoilage Window: 4h 15m if unpowered").
+   - Click **"Voice Status"** to hear automated audio telemetry readout.
+   - Test the quick **"Print NDMA Manifest"** and **"Satellite SMS"** triggers.
+
+6. **Offline-First Field Officer Reporting (`/field-reports`)**:
    - Demonstrate the "Fetch Device Coordinates" GPS button.
-   - Click **"Save Offline Draft"** to show instant local browser caching during disconnected valley conditions.
-   - Click **"Sync Now"** to push the draft to the central database, where it immediately populates the live dashboard.
+   - Click **"Save Offline Draft"** for instant local browser caching during disconnected mountain operations.
+   - Click **"Sync Now"** to push the draft to the central database, instantly updating the live incident grid.
 
-6. **Multilingual Emergency Alerts (`/alerts`)**:
+7. **Multilingual Emergency Alerts (`/alerts`)**:
    - Toggle languages: English ➔ অসমীয়া (Assamese) ➔ বাংলা (Bengali) ➔ हिंदी (Hindi) ➔ মৈতৈলোন্ (Manipuri).
    - Demonstrate disaster communication inclusivity for local NER communities.
 

@@ -219,3 +219,65 @@ export interface DashboardSummary {
   databaseStatus: 'POSTGRESQL_CONNECTED' | 'REVERTED_RESILIENT_MODE';
   lastUpdated: string;
 }
+
+export interface ColdChainTelemetry {
+  vehicleId: string;
+  shipmentId: string;
+  cargoDescription: string;
+  currentTempC: number;
+  targetMinTempC: number;
+  targetMaxTempC: number;
+  ambientTempC: number;
+  humidityPercent: number;
+  batteryReserveHours: number;
+  compressorStatus: 'ACTIVE' | 'STANDBY' | 'FAULT';
+  spoilageRiskHours: number;
+  spoilageStatus: 'OPTIMAL' | 'WARNING' | 'CRITICAL_SPOILAGE';
+  lastLoggedAt: string;
+}
+
+export interface DroneCorridor {
+  id: string;
+  baseName: string;
+  agency: 'IAF' | 'BRO' | 'NDRF' | 'CIVIL';
+  originCoordinates: [number, number];
+  targetDistrict: string;
+  targetCoordinates: [number, number];
+  flightDistanceKm: number;
+  flightTimeMinutes: number;
+  payloadCapacityKg: number;
+  status: 'READY' | 'AIRBORNE' | 'MAINTENANCE';
+  suitableCommodities: string[];
+}
+
+export interface VisionHazardScan {
+  id: string;
+  imageUrl: string;
+  hazardType: IncidentType;
+  confidencePercent: number;
+  blockagePercentage: number;
+  estimatedDebrisVolumeM3: number;
+  structuralIntegrityStatus: 'INTACT' | 'PARTIAL_COLLAPSE' | 'CATASTROPHIC_SEVERANCE';
+  recommendedDetachment: string;
+  estimatedClearanceHours: number;
+  detectedAt: string;
+}
+
+export interface DispatchManifest {
+  manifestNumber: string;
+  orderDate: string;
+  authorityAgency: 'NDMA' | 'BRO' | 'ASDMA' | 'MHA';
+  clearanceStatus: 'CLEARED_GREEN_CORRIDOR' | 'RESTRICTED_ESCORT' | 'BYPASS_MANDATED';
+  convoyLeader: string;
+  convoyLeaderContact: string;
+  radioFrequencyVHF: string;
+  originHub: string;
+  destinationHub: string;
+  selectedCorridorName: string;
+  cargoManifest: { item: string; quantity: string; category: CommodityType; priority: Priority }[];
+  vehiclesAssigned: string[];
+  emergencyWaypoints: { milestone: string; km: number; status: string }[];
+  aiSafetyScore: number;
+  safetyOfficerApproval: string;
+  verificationQrPayload: string;
+}

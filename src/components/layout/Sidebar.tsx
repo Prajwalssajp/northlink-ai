@@ -33,11 +33,12 @@ export default function Sidebar() {
 
   const navItems = [
     { name: 'Overview', href: '/', icon: LayoutDashboard },
-    { name: 'Live Map & GIS', href: '/live-map', icon: Map, badge: 'Live GIS' },
-    { name: 'Route Intelligence', href: '/route-intelligence', icon: Compass, badge: 'AI Engine' },
-    { name: 'Logistics Tracking', href: '/logistics', icon: Truck },
+    { name: 'Live Map & GIS', href: '/live-map', icon: Map, badge: 'Doppler Radar' },
+    { name: 'Route Intelligence', href: '/route-intelligence', icon: Compass, badge: 'Real ML' },
+    { name: 'Hazard Vision AI', href: '/hazard-scanner', icon: AlertTriangle, badge: 'Vision AI' },
+    { name: 'Logistics Tracking', href: '/logistics', icon: Truck, badge: 'Cold-Chain' },
     { name: 'Incidents', href: '/incidents', icon: AlertTriangle },
-    { name: 'Alerts Center', href: '/alerts', icon: Bell, badge: '3' },
+    { name: 'Alerts Center', href: '/alerts', icon: Bell, badge: 'Satellite' },
     { name: 'Field Reports', href: '/field-reports', icon: ClipboardCheck, badge: 'Offline' },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Administration', href: '/admin', icon: ShieldAlert },

@@ -23,12 +23,17 @@ import {
   Cpu, 
   Zap, 
   Target, 
-  Activity,
   Check,
-  AlertCircle
+  AlertCircle,
+  Volume2,
+  FileText,
+  Send
 } from 'lucide-react';
 import MapContainerWrapper from '@/components/gis/MapContainerWrapper';
 import { CommodityType, Priority, RoadSegment } from '@/lib/types';
+import { speakTacticalAlert } from '@/lib/voice-assistant';
+import DispatchManifestModal from '@/components/dispatch/DispatchManifestModal';
+import SmsBroadcastModal from '@/components/alerts/SmsBroadcastModal';
 
 // Mini bar chart for feature importances
 function FeatureImportanceBar({ label, value, color = 'cyan' }: { label: string; value: number; color?: string }) {
@@ -87,6 +92,8 @@ export default function RouteIntelligencePage() {
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [analysisTime, setAnalysisTime] = useState<string>('');
   const [showMLPanel, setShowMLPanel] = useState<boolean>(true);
+  const [showManifestModal, setShowManifestModal] = useState<boolean>(false);
+  const [showSmsModal, setShowSmsModal] = useState<boolean>(false);
 
   // Configurable weights modal toggle
   const [showWeights, setShowWeights] = useState<boolean>(false);
@@ -494,6 +501,39 @@ export default function RouteIntelligencePage() {
                 </div>
               </div>
             </div>
+
+            {/* Quick Actions Bar */}
+            <div className="mt-4 flex flex-wrap items-center gap-2.5 border-t border-cyan-900/50 pt-3">
+              <button
+                type="button"
+                onClick={() => setShowManifestModal(true)}
+                className="flex items-center space-x-1.5 rounded-lg bg-cyan-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-cyan-500 transition-all shadow cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>NDMA Manifest PDF</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const speech = `AI Directive: Recommended corridor is ${analysisResult.comparison.recommendedRouteName}. ${analysisResult.comparison.recommendationReason}`;
+                  speakTacticalAlert(speech, 'en');
+                }}
+                className="flex items-center space-x-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-200 hover:border-cyan-500 hover:text-white transition-all cursor-pointer"
+              >
+                <Volume2 className="h-3.5 w-3.5 text-cyan-400" />
+                <span>Listen Voice Guidance</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowSmsModal(true)}
+                className="flex items-center space-x-1.5 rounded-lg border border-amber-800/80 bg-amber-950/40 px-3 py-1.5 text-xs font-bold text-amber-300 hover:bg-amber-900/60 transition-all shadow-sm cursor-pointer"
+              >
+                <Send className="h-3.5 w-3.5 text-amber-400" />
+                <span>Broadcast Reroute SMS</span>
+              </button>
+            </div>
           </div>
 
           {/* ══════════════════ ML RECOMMENDATION DECISION EXPLAINABILITY ══════════════════ */}
@@ -865,6 +905,24 @@ export default function RouteIntelligencePage() {
           </div>
         </div>
       )}
+
+      {/* NDMA / BRO Official Dispatch Manifest Modal */}
+      <DispatchManifestModal
+        isOpen={showManifestModal}
+        onClose={() => setShowManifestModal(false)}
+        origin={origin}
+        destination={destination}
+        corridorName={analysisResult?.comparison?.recommendedRouteName || `${origin} to ${destination} Emergency Corridor`}
+        commodityType={`${commodity} (Priority: ${priority})`}
+        riskScore={analysisResult?.recommendedRoute?.riskScore || 24}
+      />
+
+      {/* Satellite SMS & Low-Bandwidth Dispatch Simulator Modal */}
+      <SmsBroadcastModal
+        isOpen={showSmsModal}
+        onClose={() => setShowSmsModal(false)}
+        defaultMessage={`[NORTHLINK AI DISPATCH] Reroute Order: Take ${analysisResult?.comparison?.recommendedRouteName || 'NH-27 Lumding Bypass'}. ${analysisResult?.comparison?.recommendationReason?.slice(0, 75) || 'Primary route disrupted by high landslide risk.'} ETA updated.`}
+      />
     </div>
   );
 }

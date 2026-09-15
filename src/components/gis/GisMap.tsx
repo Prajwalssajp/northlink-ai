@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, Tooltip, CircleMarker } from 'react-leaflet';
+import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, Tooltip, Circle, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
 import { RoadSegment, Incident, Vehicle, District } from '@/lib/types';
+import { INITIAL_DRONE_CORRIDORS } from '@/lib/drone-corridors';
+import { CloudRain, Navigation, Eye, EyeOff } from 'lucide-react';
 
-// Fix default marker icon issues in Leaflet with bundlers
+// Custom Marker icons
 const createCustomIcon = (color: string, iconSymbol: string, isCritical = false) => {
   return L.divIcon({
     className: 'custom-leaflet-icon',
@@ -54,8 +56,71 @@ export default function GisMap({
   initialCenter = [25.8, 92.5],
   initialZoom = 7,
 }: GisMapProps) {
+  // New High-Tech GIS Toggles
+  const [showWeatherRadar, setShowWeatherRadar] = useState(true);
+  const [showDroneCorridors, setShowDroneCorridors] = useState(false);
+
+  // Simulated IMD Doppler Weather Radar Storm Zones
+  const weatherZones = [
+    {
+      center: [25.30, 92.10] as [number, number],
+      radius: 42000,
+      intensity: 'EXTREME_CLOUDBURST',
+      rainfallMm: 185,
+      name: 'IMD Alert: Cherrapunji - Jowai Cloudburst Front',
+      color: '#dc2626',
+    },
+    {
+      center: [27.05, 88.45] as [number, number],
+      radius: 35000,
+      intensity: 'HEAVY_MONSOON_SURGE',
+      rainfallMm: 120,
+      name: 'Teesta River Basin Active Monsoon Cell',
+      color: '#ea580c',
+    },
+    {
+      center: [25.10, 93.00] as [number, number],
+      radius: 28000,
+      intensity: 'MODERATE_RAIN',
+      rainfallMm: 65,
+      name: 'Barail Mountain Range Precipitation',
+      color: '#0284c7',
+    },
+  ];
+
   return (
     <div style={{ height, width: '100%' }} className="relative overflow-hidden rounded-xl border border-slate-800 bg-[#060911]">
+      {/* Top-Right Interactive Map Controls */}
+      <div className="absolute top-3 right-3 z-[1000] flex items-center space-x-2">
+        <button
+          type="button"
+          onClick={() => setShowWeatherRadar(!showWeatherRadar)}
+          className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-all shadow-lg backdrop-blur ${
+            showWeatherRadar
+              ? 'bg-sky-950 text-sky-300 border border-sky-600 ring-1 ring-sky-500'
+              : 'bg-slate-900/90 text-slate-400 border border-slate-700 hover:text-white'
+          }`}
+          title="Toggle IMD Doppler Precipitation Weather Radar Overlay"
+        >
+          <CloudRain className="h-3.5 w-3.5" />
+          <span>Doppler Radar {showWeatherRadar ? 'ON' : 'OFF'}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setShowDroneCorridors(!showDroneCorridors)}
+          className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-all shadow-lg backdrop-blur ${
+            showDroneCorridors
+              ? 'bg-amber-950 text-amber-300 border border-amber-600 ring-1 ring-amber-500'
+              : 'bg-slate-900/90 text-slate-400 border border-slate-700 hover:text-white'
+          }`}
+          title="Toggle Aerial Drone & Helicopter Supply Corridors for Isolated Valleys"
+        >
+          <Navigation className="h-3.5 w-3.5 rotate-45" />
+          <span>Drone Corridors {showDroneCorridors ? 'ACTIVE' : 'OFF'}</span>
+        </button>
+      </div>
+
       <MapContainer
         center={initialCenter}
         zoom={initialZoom}
@@ -68,6 +133,76 @@ export default function GisMap({
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           maxZoom={19}
         />
+
+        {/* ══════════════════ WEATHER RADAR PRECIPITATION OVERLAY ══════════════════ */}
+        {showWeatherRadar &&
+          weatherZones.map((zone, idx) => (
+            <Circle
+              key={idx}
+              center={zone.center}
+              radius={zone.radius}
+              pathOptions={{
+                color: zone.color,
+                fillColor: zone.color,
+                fillOpacity: 0.22,
+                weight: 1.5,
+                dashArray: '4, 6',
+              }}
+            >
+              <Popup>
+                <div className="text-xs space-y-1">
+                  <div className="font-bold text-sky-400 flex items-center space-x-1">
+                    <CloudRain className="h-3.5 w-3.5" />
+                    <span>{zone.name}</span>
+                  </div>
+                  <div className="text-slate-200">
+                    Intensity: <span className="font-bold text-rose-400">{zone.rainfallMm} mm/24h</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    IMD Doppler Live Radar: Saturated mountain slopes risk factor elevated.
+                  </div>
+                </div>
+              </Popup>
+            </Circle>
+          ))}
+
+        {/* ══════════════════ DRONE & HELICOPTER RELIEF AIR BRIDGES ══════════════════ */}
+        {showDroneCorridors &&
+          INITIAL_DRONE_CORRIDORS.map((drone) => (
+            <React.Fragment key={drone.id}>
+              {/* Air Corridor Flight Vector */}
+              <Polyline
+                positions={[drone.originCoordinates, drone.targetCoordinates]}
+                pathOptions={{
+                  color: '#f59e0b',
+                  weight: 3,
+                  dashArray: '8, 8',
+                  opacity: 0.9,
+                }}
+              >
+                <Tooltip sticky>
+                  <div className="text-[10px] font-mono">
+                    <span className="font-bold text-amber-400">AIR BRIDGE:</span> {drone.flightDistanceKm} km · {drone.flightTimeMinutes} mins
+                  </div>
+                </Tooltip>
+              </Polyline>
+
+              {/* Airbase Origin Marker */}
+              <CircleMarker
+                center={drone.originCoordinates}
+                radius={7}
+                pathOptions={{ color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 0.9 }}
+              >
+                <Popup>
+                  <div className="text-xs">
+                    <div className="font-bold text-amber-400">🚁 {drone.baseName}</div>
+                    <div className="text-slate-300">Payload Capacity: {drone.payloadCapacityKg} kg</div>
+                    <div className="text-[10px] text-slate-400">Suitable for Cold-Chain Vaccines & Emergency Blood</div>
+                  </div>
+                </Popup>
+              </CircleMarker>
+            </React.Fragment>
+          ))}
 
         {/* Road Corridors */}
         {showRoads &&
@@ -101,25 +236,9 @@ export default function GisMap({
               >
                 <Tooltip sticky>
                   <div className="text-xs">
-                    <span className="font-bold text-cyan-400">{road.highwayNumber}: </span>
-                    <span>{road.name}</span>
-                    <div className="text-[10px] text-slate-300">
-                      Status: <span style={{ color }}>{road.accessibilityStatus}</span>
-                    </div>
+                    <span className="font-bold">{road.name}</span> ({road.accessibilityStatus})
                   </div>
                 </Tooltip>
-                <Popup>
-                  <div className="space-y-1 text-xs">
-                    <div className="font-bold text-white">{road.name}</div>
-                    <div className="text-slate-400">Route: {road.source} ➔ {road.destination}</div>
-                    <div className="flex items-center space-x-2 pt-1">
-                      <span className="rounded px-1.5 py-0.5 text-[10px] font-bold" style={{ backgroundColor: `${color}33`, color }}>
-                        {road.accessibilityStatus}
-                      </span>
-                      <span className="text-[10px] text-slate-400">Avg Travel: {Math.round(road.averageTravelTime / 60)}h</span>
-                    </div>
-                  </div>
-                </Popup>
               </Polyline>
             );
           })}
@@ -127,49 +246,34 @@ export default function GisMap({
         {/* Incidents Markers */}
         {showIncidents &&
           incidents.map((inc) => {
-            const isCritical = inc.severity === 'CRITICAL';
-            let color = '#f59e0b';
-            let symbol = '⚠️';
-            if (inc.incidentType === 'LANDSLIDE') {
-              color = isCritical ? '#ef4444' : '#f97316';
-              symbol = '⛰️';
-            } else if (inc.incidentType === 'FLOOD') {
-              color = '#0284c7';
-              symbol = '🌊';
-            } else if (inc.incidentType === 'HEAVY_RAINFALL') {
-              color = '#06b6d4';
-              symbol = '🌧️';
-            } else if (inc.incidentType === 'BRIDGE_DAMAGE' || inc.incidentType === 'ROAD_DAMAGE') {
-              color = '#e11d48';
-              symbol = '🚧';
-            }
+            let iconColor = '#ef4444';
+            let iconSymbol = '⚠️';
+            if (inc.incidentType === 'LANDSLIDE') iconSymbol = '⛰️';
+            else if (inc.incidentType === 'FLOOD') {
+              iconColor = '#0284c7';
+              iconSymbol = '🌊';
+            } else if (inc.incidentType === 'ROAD_DAMAGE') iconSymbol = '🚧';
+            else if (inc.incidentType === 'BRIDGE_DAMAGE') iconSymbol = '🌉';
+            else if (inc.incidentType === 'HEAVY_RAINFALL') iconSymbol = '🌧️';
 
-            const icon = createCustomIcon(color, symbol, isCritical);
+            const customIcon = createCustomIcon(iconColor, iconSymbol, inc.severity === 'CRITICAL');
 
             return (
               <Marker
                 key={inc.id}
                 position={[inc.latitude, inc.longitude]}
-                icon={icon}
+                icon={customIcon}
                 eventHandlers={{
                   click: () => onSelectIncident && onSelectIncident(inc),
                 }}
               >
                 <Popup>
-                  <div className="w-56 space-y-1 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-white">{inc.incidentType}</span>
-                      <span
-                        className="rounded px-1 text-[9px] font-extrabold"
-                        style={{ backgroundColor: `${color}33`, color }}
-                      >
-                        {inc.severity}
-                      </span>
-                    </div>
-                    <p className="font-medium text-slate-200">{inc.title}</p>
-                    <p className="text-[11px] text-slate-400 line-clamp-2">{inc.description}</p>
-                    <div className="pt-1 text-[10px] text-slate-400">
-                      Reported: {new Date(inc.reportedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  <div className="space-y-1 text-xs">
+                    <div className="font-bold text-rose-400">{inc.title}</div>
+                    <p className="text-slate-300">{inc.description}</p>
+                    <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+                      <span>{inc.locationName}</span>
+                      <span className="font-bold text-rose-300">{inc.severity}</span>
                     </div>
                   </div>
                 </Popup>
@@ -214,20 +318,28 @@ export default function GisMap({
       <div className="absolute bottom-3 left-3 z-[1000] flex flex-wrap gap-2 rounded-lg border border-slate-800 bg-[#080c14]/90 p-2 text-[10px] backdrop-blur">
         <div className="flex items-center space-x-1.5">
           <span className="h-2 w-4 rounded-full bg-emerald-500"></span>
-          <span className="text-slate-300">Open</span>
-        </div>
-        <div className="flex items-center space-x-1.5">
-          <span className="h-2 w-4 rounded-full bg-amber-500"></span>
-          <span className="text-slate-300">Restricted</span>
+          <span className="text-slate-300">Open Corridor</span>
         </div>
         <div className="flex items-center space-x-1.5">
           <span className="h-2 w-4 rounded-full bg-rose-500"></span>
-          <span className="text-slate-300">Critical / Blocked</span>
+          <span className="text-slate-300">Blocked / Severed</span>
         </div>
         <div className="flex items-center space-x-1.5">
           <span className="h-2 w-2 rounded-full bg-cyan-400"></span>
-          <span className="text-slate-300">Vehicle GPS</span>
+          <span className="text-slate-300">Convoy GPS</span>
         </div>
+        {showWeatherRadar && (
+          <div className="flex items-center space-x-1.5">
+            <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse"></span>
+            <span className="text-sky-300 font-semibold">Doppler Rain Radar</span>
+          </div>
+        )}
+        {showDroneCorridors && (
+          <div className="flex items-center space-x-1.5">
+            <span className="h-2 w-2 rounded-full bg-amber-400"></span>
+            <span className="text-amber-300 font-semibold">Air Bridge Vector</span>
+          </div>
+        )}
       </div>
     </div>
   );
