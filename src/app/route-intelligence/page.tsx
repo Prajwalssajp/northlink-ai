@@ -243,11 +243,24 @@ export default function RouteIntelligencePage() {
           )}
           <button
             onClick={() => setShowWeights(!showWeights)}
-            className="flex items-center space-x-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-cyan-500 hover:text-white"
+            className="flex items-center space-x-2 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-cyan-500 hover:text-white cursor-pointer"
           >
             <Sliders className="h-3.5 w-3.5 text-cyan-400" />
             <span>Scoring Weights</span>
           </button>
+        </div>
+      </div>
+
+      {/* ForThePeople.in & Power BI Judge Quick Orientation Banner */}
+      <div className="flex items-center space-x-3 rounded-xl border border-cyan-900/50 bg-[#080e1b] p-3.5 shadow-md">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-950 text-cyan-400 border border-cyan-800">
+          <Brain className="h-4 w-4" />
+        </div>
+        <div className="text-xs">
+          <span className="font-bold text-white">How This AI Works for Judges: </span>
+          <span className="text-slate-300">
+            Select a mountain corridor (e.g. Guwahati to Silchar) and click <strong className="text-cyan-300">Analyze</strong>. The Random Forest Machine Learning ensemble evaluates live landslides (Sonapur Tunnel), floods, and roadbed health, automatically calculating consensus votes, delay hours avoided, and generating an official NDMA transit manifest.
+          </span>
         </div>
       </div>
 

@@ -12,7 +12,8 @@ import {
   User as UserIcon,
   AlertTriangle,
   LogOut,
-  LogIn
+  LogIn,
+  ShieldCheck
 } from 'lucide-react';
 import { useDemo } from '@/lib/demo-context';
 import { Role } from '@/lib/types';
@@ -76,26 +77,51 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-[#080c14]/95 px-6 backdrop-blur">
-      {/* Left: Operational status and time */}
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-3 py-1 text-xs text-emerald-400">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-          </span>
-          <span className="font-semibold tracking-wider">NER CORRIDOR GRID ACTIVE</span>
-        </div>
-
-        <div className="hidden items-center space-x-2 text-xs text-slate-400 md:flex">
-          <Activity className="h-3.5 w-3.5 text-cyan-400" />
-          <span>PostgreSQL + PostGIS Ready</span>
-        </div>
-
-        <div className="hidden rounded bg-slate-900 px-2.5 py-1 font-mono text-xs text-slate-300 sm:block">
-          {time || '19:28:00 IST'}
-        </div>
+    <header className="sticky top-0 z-30 flex flex-col w-full border-b border-slate-800 bg-[#080c14]/95 backdrop-blur">
+      {/* UX4G Indian National Tricolor Micro-Accent Stripe */}
+      <div className="flex h-[3px] w-full">
+        <div className="h-full w-1/3 bg-[#FF9933]" title="Tricolor Saffron" />
+        <div className="h-full w-1/3 bg-[#FFFFFF]" title="Tricolor White" />
+        <div className="h-full w-1/3 bg-[#138808]" title="Tricolor Green" />
       </div>
+
+      <div className="flex h-15 w-full items-center justify-between px-4 sm:px-6">
+        {/* Left: Indian Government & MDoNER Agency Identity */}
+        <div className="flex items-center space-x-3">
+          {/* Government of India Emblem / Ashoka Chakra Seal Representation */}
+          <div className="hidden items-center space-x-2 border-r border-slate-800 pr-3 sm:flex">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full border border-amber-500/40 bg-amber-950/20 text-amber-400 font-serif font-black text-xs shadow-inner">
+              🏛️
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-[10px] font-bold tracking-wider text-slate-300 uppercase">
+                Govt. of India · भारत सरकार
+              </span>
+              <span className="text-[9px] font-medium text-slate-400">
+                Ministry of Development of North Eastern Region
+              </span>
+            </div>
+          </div>
+
+          {/* Operational Corridor Status */}
+          <div className="flex items-center space-x-2 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-3 py-1 text-xs text-emerald-400">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            </span>
+            <span className="font-semibold tracking-wider text-[11px]">8 NER STATES ACTIVE</span>
+          </div>
+
+          {/* DigiLocker-Style Compliance Badge */}
+          <div className="hidden items-center space-x-1.5 rounded border border-cyan-800/60 bg-cyan-950/40 px-2 py-0.5 text-[10px] text-cyan-300 md:flex">
+            <ShieldCheck className="h-3 w-3 text-cyan-400" />
+            <span>NIC · PostGIS Verified</span>
+          </div>
+
+          <div className="hidden rounded bg-slate-900/90 border border-slate-800 px-2.5 py-1 font-mono text-xs text-slate-300 lg:block">
+            {time || '19:28:00 IST'}
+          </div>
+        </div>
 
       {/* Right: Simulation toggle, Role switch, Alerts, Profile */}
       <div className="flex items-center space-x-3">
@@ -261,6 +287,7 @@ export default function Header() {
             <span>Sign In</span>
           </Link>
         )}
+        </div>
       </div>
     </header>
   );

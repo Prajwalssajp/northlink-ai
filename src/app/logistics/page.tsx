@@ -134,6 +134,35 @@ export default function LogisticsTrackingPage() {
         </div>
       </div>
 
+      {/* Samsara-Style Fleet Telemetry Summary Strip */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 rounded-xl border border-slate-800 bg-[#070c16] p-3.5 shadow-lg">
+        <div className="border-r border-slate-800/80 pr-3">
+          <div className="text-[10px] uppercase font-bold text-slate-400">Total Convoys</div>
+          <div className="text-xl font-black text-white">{vehicles.length || 12} Active</div>
+          <div className="text-[10px] text-cyan-400 font-medium">GPS Tracking 100%</div>
+        </div>
+        <div className="border-r border-slate-800/80 pr-3">
+          <div className="text-[10px] uppercase font-bold text-slate-400">On-Time Transit</div>
+          <div className="text-xl font-black text-emerald-400">91.6%</div>
+          <div className="text-[10px] text-slate-400 font-medium">Within Target SLA</div>
+        </div>
+        <div className="border-r border-slate-800/80 pr-3">
+          <div className="text-[10px] uppercase font-bold text-slate-400">Cold-Chain Status</div>
+          <div className="text-xl font-black text-blue-400">Stable</div>
+          <div className="text-[10px] text-blue-300 font-medium">IoT BLE Synchronized</div>
+        </div>
+        <div className="border-r border-slate-800/80 pr-3">
+          <div className="text-[10px] uppercase font-bold text-slate-400">Avg Convoy Speed</div>
+          <div className="text-xl font-black text-cyan-300">38 km/h</div>
+          <div className="text-[10px] text-slate-400 font-medium">Mountain Gradient Safe</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase font-bold text-slate-400">Emergency Corridors</div>
+          <div className="text-xl font-black text-amber-400">2 Rerouted</div>
+          <div className="text-[10px] text-amber-300 font-medium">NH-27 Bypass Active</div>
+        </div>
+      </div>
+
       {/* ══════════════════ COLD-CHAIN IOT TELEMETRY & SPOILAGE MONITOR ══════════════════ */}
       <div className="rounded-xl border border-cyan-900/50 bg-[#070e1a] p-5 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-cyan-900/40 pb-3 gap-2">

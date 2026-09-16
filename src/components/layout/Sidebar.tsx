@@ -17,7 +17,8 @@ import {
   Mountain,
   LogOut,
   LogIn,
-  UserCheck
+  UserCheck,
+  ShieldCheck
 } from 'lucide-react';
 import { useDemo } from '@/lib/demo-context';
 
@@ -31,18 +32,43 @@ export default function Sidebar() {
     router.push('/login');
   };
 
-  const navItems = [
-    { name: 'Overview', href: '/', icon: LayoutDashboard },
-    { name: 'Live Map & GIS', href: '/live-map', icon: Map, badge: 'Doppler Radar' },
-    { name: 'Route Intelligence', href: '/route-intelligence', icon: Compass, badge: 'Real ML' },
-    { name: 'Hazard Vision AI', href: '/hazard-scanner', icon: AlertTriangle, badge: 'Vision AI' },
-    { name: 'Logistics Tracking', href: '/logistics', icon: Truck, badge: 'Cold-Chain' },
-    { name: 'Incidents', href: '/incidents', icon: AlertTriangle },
-    { name: 'Alerts Center', href: '/alerts', icon: Bell, badge: 'Satellite' },
-    { name: 'Field Reports', href: '/field-reports', icon: ClipboardCheck, badge: 'Offline' },
-    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Administration', href: '/admin', icon: ShieldAlert },
-    { name: 'Settings', href: '/settings', icon: Settings },
+  const navSections = [
+    {
+      title: 'Command & Executive',
+      items: [
+        { name: 'Overview', href: '/', icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: 'Geospatial & AI Intelligence',
+      items: [
+        { name: 'Live Map & GIS', href: '/live-map', icon: Map, badge: 'Doppler Radar' },
+        { name: 'Route Intelligence', href: '/route-intelligence', icon: Compass, badge: 'Real ML' },
+        { name: 'Hazard Vision AI', href: '/hazard-scanner', icon: AlertTriangle, badge: 'Vision AI' },
+      ],
+    },
+    {
+      title: 'Fleet & Cold-Chain',
+      items: [
+        { name: 'Logistics Fleet', href: '/logistics', icon: Truck, badge: 'Cold-Chain' },
+        { name: 'Incidents Grid', href: '/incidents', icon: AlertTriangle },
+      ],
+    },
+    {
+      title: 'Emergency & Field',
+      items: [
+        { name: 'Alerts Center', href: '/alerts', icon: Bell, badge: 'Satellite' },
+        { name: 'Field Reports', href: '/field-reports', icon: ClipboardCheck, badge: 'Offline' },
+      ],
+    },
+    {
+      title: 'Analytics & System',
+      items: [
+        { name: 'Power BI Analytics', href: '/analytics', icon: BarChart3 },
+        { name: 'Administration', href: '/admin', icon: ShieldAlert },
+        { name: 'Settings', href: '/settings', icon: Settings },
+      ],
+    },
   ];
 
   return (
@@ -66,50 +92,58 @@ export default function Sidebar() {
         </Link>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          Command Systems
-        </div>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`group flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950/70 text-cyan-300 border border-cyan-800/60 font-semibold'
-                  : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <Icon
-                  className={`h-4 w-4 transition-colors ${
-                    isActive ? 'text-cyan-400' : 'text-slate-400 group-hover:text-slate-300'
-                  }`}
-                />
-                <span>{item.name}</span>
-              </div>
-              {item.badge && (
-                <span
-                  className={`rounded px-1.5 py-0.5 text-[9px] font-semibold ${
-                    item.badge === 'AI Engine'
-                      ? 'bg-cyan-950 text-cyan-300 border border-cyan-800'
-                      : item.badge === '3'
-                      ? 'bg-rose-950 text-rose-300 border border-rose-800'
-                      : item.badge === 'Offline'
-                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                      : 'bg-slate-800 text-slate-300'
+      {/* Navigation Groups (Samsara Style) */}
+      <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-3">
+        {navSections.map((section) => (
+          <div key={section.title} className="space-y-1">
+            <div className="px-3 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+              {section.title}
+            </div>
+            {section.items.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`group flex items-center justify-between rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                    isActive
+                      ? 'bg-cyan-950/70 text-cyan-300 border border-cyan-800/60 font-semibold'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
                   }`}
                 >
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          );
-        })}
+                  <div className="flex items-center space-x-2.5">
+                    <Icon
+                      className={`h-4 w-4 transition-colors ${
+                        isActive ? 'text-cyan-400' : 'text-slate-400 group-hover:text-slate-300'
+                      }`}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                  {item.badge && (
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[9px] font-semibold ${
+                        item.badge === 'Real ML'
+                          ? 'bg-cyan-950 text-cyan-300 border border-cyan-800'
+                          : item.badge === 'Cold-Chain'
+                          ? 'bg-blue-950 text-blue-300 border border-blue-800'
+                          : item.badge === 'Doppler Radar'
+                          ? 'bg-sky-950 text-sky-300 border border-sky-800'
+                          : item.badge === 'Vision AI'
+                          ? 'bg-violet-950 text-violet-300 border border-violet-800'
+                          : item.badge === 'Offline'
+                          ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                          : 'bg-slate-800 text-slate-300'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Footer Profile & Auth Actions */}
@@ -162,6 +196,17 @@ export default function Sidebar() {
             </Link>
           </div>
         )}
+      </div>
+
+      {/* DigiLocker / UX4G Trust & Compliance Stamp */}
+      <div className="border-t border-slate-800/90 bg-[#05080e] px-4 py-2.5">
+        <div className="flex items-center space-x-2 text-[10px] text-slate-400 font-medium">
+          <ShieldCheck className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+          <div className="truncate">
+            <div className="text-slate-300 font-semibold">NDMA · MDoNER Grid</div>
+            <div className="text-[9px] text-slate-400">Digital India · PostGIS Verified</div>
+          </div>
+        </div>
       </div>
     </aside>
   );

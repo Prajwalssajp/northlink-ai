@@ -90,15 +90,26 @@ export default function GisMap({
 
   return (
     <div style={{ height, width: '100%' }} className="relative overflow-hidden rounded-xl border border-slate-800 bg-[#060911]">
-      {/* Top-Right Interactive Map Controls */}
+      {/* Top-Left Google Maps / Mapbox Style Status Pill */}
+      <div className="absolute top-3 left-3 z-[1000] hidden sm:flex items-center space-x-2 rounded-lg border border-slate-700/80 bg-[#080c14]/90 px-3 py-1.5 text-xs backdrop-blur shadow-xl">
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75"></span>
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500"></span>
+        </span>
+        <span className="font-bold text-white text-[11px] tracking-wide">POSTGIS CARTOGRAPHY</span>
+        <span className="text-slate-500 text-[10px]">|</span>
+        <span className="text-slate-300 text-[10px] font-medium">8 NER States Grid</span>
+      </div>
+
+      {/* Top-Right Interactive Map Controls (Google Maps Inspired Floating Buttons) */}
       <div className="absolute top-3 right-3 z-[1000] flex items-center space-x-2">
         <button
           type="button"
           onClick={() => setShowWeatherRadar(!showWeatherRadar)}
-          className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-all shadow-lg backdrop-blur ${
+          className={`flex items-center space-x-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all shadow-lg backdrop-blur cursor-pointer ${
             showWeatherRadar
-              ? 'bg-sky-950 text-sky-300 border border-sky-600 ring-1 ring-sky-500'
-              : 'bg-slate-900/90 text-slate-400 border border-slate-700 hover:text-white'
+              ? 'bg-sky-950/90 text-sky-300 border border-sky-500 ring-1 ring-sky-500'
+              : 'bg-slate-900/90 text-slate-400 border border-slate-700 hover:text-white hover:border-slate-500'
           }`}
           title="Toggle IMD Doppler Precipitation Weather Radar Overlay"
         >
@@ -109,10 +120,10 @@ export default function GisMap({
         <button
           type="button"
           onClick={() => setShowDroneCorridors(!showDroneCorridors)}
-          className={`flex items-center space-x-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-all shadow-lg backdrop-blur ${
+          className={`flex items-center space-x-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all shadow-lg backdrop-blur cursor-pointer ${
             showDroneCorridors
-              ? 'bg-amber-950 text-amber-300 border border-amber-600 ring-1 ring-amber-500'
-              : 'bg-slate-900/90 text-slate-400 border border-slate-700 hover:text-white'
+              ? 'bg-amber-950/90 text-amber-300 border border-amber-500 ring-1 ring-amber-500'
+              : 'bg-slate-900/90 text-slate-400 border border-slate-700 hover:text-white hover:border-slate-500'
           }`}
           title="Toggle Aerial Drone & Helicopter Supply Corridors for Isolated Valleys"
         >
@@ -314,32 +325,38 @@ export default function GisMap({
           })}
       </MapContainer>
 
-      {/* Embedded Map Legend */}
-      <div className="absolute bottom-3 left-3 z-[1000] flex flex-wrap gap-2 rounded-lg border border-slate-800 bg-[#080c14]/90 p-2 text-[10px] backdrop-blur">
-        <div className="flex items-center space-x-1.5">
-          <span className="h-2 w-4 rounded-full bg-emerald-500"></span>
-          <span className="text-slate-300">Open Corridor</span>
+      {/* Mapbox-Inspired GIS Legend Card */}
+      <div className="absolute bottom-3 left-3 z-[1000] rounded-xl border border-slate-700/80 bg-[#080c14]/95 p-2.5 text-[10px] shadow-2xl backdrop-blur">
+        <div className="mb-1.5 flex items-center justify-between border-b border-slate-800 pb-1 text-[9px] font-bold uppercase tracking-wider text-slate-400">
+          <span>GIS Spatial Legend</span>
+          <span className="text-[8px] text-cyan-400 font-mono">LIVE</span>
         </div>
-        <div className="flex items-center space-x-1.5">
-          <span className="h-2 w-4 rounded-full bg-rose-500"></span>
-          <span className="text-slate-300">Blocked / Severed</span>
-        </div>
-        <div className="flex items-center space-x-1.5">
-          <span className="h-2 w-2 rounded-full bg-cyan-400"></span>
-          <span className="text-slate-300">Convoy GPS</span>
-        </div>
-        {showWeatherRadar && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           <div className="flex items-center space-x-1.5">
-            <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse"></span>
-            <span className="text-sky-300 font-semibold">Doppler Rain Radar</span>
+            <span className="h-1.5 w-3.5 rounded-full bg-emerald-500"></span>
+            <span className="text-slate-300 font-medium">Open Highway</span>
           </div>
-        )}
-        {showDroneCorridors && (
           <div className="flex items-center space-x-1.5">
-            <span className="h-2 w-2 rounded-full bg-amber-400"></span>
-            <span className="text-amber-300 font-semibold">Air Bridge Vector</span>
+            <span className="h-1.5 w-3.5 rounded-full bg-rose-500"></span>
+            <span className="text-slate-300 font-medium">Severed Corridor</span>
           </div>
-        )}
+          <div className="flex items-center space-x-1.5">
+            <span className="h-2 w-2 rounded-full bg-cyan-400"></span>
+            <span className="text-slate-300 font-medium">Convoy GPS</span>
+          </div>
+          {showWeatherRadar && (
+            <div className="flex items-center space-x-1.5">
+              <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse"></span>
+              <span className="text-sky-300 font-bold">IMD Doppler Storm</span>
+            </div>
+          )}
+          {showDroneCorridors && (
+            <div className="flex items-center space-x-1.5">
+              <span className="h-2 w-2 rounded-full bg-amber-400"></span>
+              <span className="text-amber-300 font-bold">IAF Drone Bridge</span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
