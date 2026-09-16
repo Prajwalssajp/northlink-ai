@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, Tooltip, Circle, Circ
 import L from 'leaflet';
 import { RoadSegment, Incident, Vehicle, District } from '@/lib/types';
 import { INITIAL_DRONE_CORRIDORS } from '@/lib/drone-corridors';
-import { CloudRain, Navigation, Eye, EyeOff } from 'lucide-react';
+import { CloudRain, Navigation, Eye, EyeOff, Layers, Compass } from 'lucide-react';
 
 // Custom Marker icons
 const createCustomIcon = (color: string, iconSymbol: string, isCritical = false) => {
@@ -99,6 +99,71 @@ export default function GisMap({
         <span className="font-bold text-white text-[11px] tracking-wide">POSTGIS CARTOGRAPHY</span>
         <span className="text-slate-500 text-[10px]">|</span>
         <span className="text-slate-300 text-[10px] font-medium">8 NER States Grid</span>
+      </div>
+
+      {/* Mapbox-Style Floating Layer Selector Panel (matches media_1789579857727.png) */}
+      <div className="absolute top-12 left-3 z-[1000] hidden md:block rounded-xl border border-slate-700/80 bg-[#080c14]/95 p-2.5 shadow-2xl backdrop-blur">
+        <div className="mb-2 flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <div className="flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400">
+            <Layers className="h-3 w-3" />
+            <span>GIS Map Layers</span>
+          </div>
+          <span className="rounded bg-cyan-950 px-1 text-[8px] font-bold text-cyan-300">Mapbox SDK</span>
+        </div>
+
+        <div className="space-y-1 text-[11px]">
+          <div className="flex items-center justify-between space-x-3 rounded-lg px-2 py-1 bg-slate-900/60 text-slate-300">
+            <span className="flex items-center space-x-1.5">
+              <span>🛣️</span>
+              <span className="font-medium">Corridors ({roads.length})</span>
+            </span>
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+          </div>
+
+          <div className="flex items-center justify-between space-x-3 rounded-lg px-2 py-1 bg-slate-900/60 text-slate-300">
+            <span className="flex items-center space-x-1.5">
+              <span>🚚</span>
+              <span className="font-medium">Convoys ({vehicles.length})</span>
+            </span>
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          </div>
+
+          <div className="flex items-center justify-between space-x-3 rounded-lg px-2 py-1 bg-slate-900/60 text-slate-300">
+            <span className="flex items-center space-x-1.5">
+              <span>⚠️</span>
+              <span className="font-medium">Landslides ({incidents.length})</span>
+            </span>
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowWeatherRadar(!showWeatherRadar)}
+            className={`flex w-full items-center justify-between space-x-3 rounded-lg px-2 py-1 text-left font-medium transition-all cursor-pointer ${
+              showWeatherRadar ? 'bg-sky-950 text-sky-300 border border-sky-800' : 'bg-slate-900/60 text-slate-400 hover:text-white'
+            }`}
+          >
+            <span className="flex items-center space-x-1.5">
+              <span>🌧️</span>
+              <span>Doppler Radar</span>
+            </span>
+            <span className={`h-1.5 w-1.5 rounded-full ${showWeatherRadar ? 'bg-sky-400 animate-pulse' : 'bg-slate-600'}`} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowDroneCorridors(!showDroneCorridors)}
+            className={`flex w-full items-center justify-between space-x-3 rounded-lg px-2 py-1 text-left font-medium transition-all cursor-pointer ${
+              showDroneCorridors ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-slate-900/60 text-slate-400 hover:text-white'
+            }`}
+          >
+            <span className="flex items-center space-x-1.5">
+              <span>🚁</span>
+              <span>Drone Bridges</span>
+            </span>
+            <span className={`h-1.5 w-1.5 rounded-full ${showDroneCorridors ? 'bg-amber-400' : 'bg-slate-600'}`} />
+          </button>
+        </div>
       </div>
 
       {/* Top-Right Interactive Map Controls (Google Maps Inspired Floating Buttons) */}

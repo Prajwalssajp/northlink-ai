@@ -17,7 +17,8 @@ import {
   Truck,
   Compass,
   FileText,
-  UserCheck
+  UserCheck,
+  Building2
 } from 'lucide-react';
 import { useDemo } from '@/lib/demo-context';
 import { INITIAL_USERS } from '@/lib/ner-data';
@@ -147,23 +148,53 @@ function LoginContent() {
 
       {/* Main card container */}
       <div className="relative z-10 w-full max-w-4xl space-y-6">
-        {/* Brand identity */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center space-x-3 rounded-full border border-cyan-500/30 bg-cyan-950/40 px-4 py-1.5 backdrop-blur shadow-lg shadow-cyan-950/50">
-            <div className="relative flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 text-white shadow">
-              <Mountain className="h-3.5 w-3.5" />
+        {/* DigiLocker & UX4G Official Government Portal Identity */}
+        <div className="text-center space-y-2.5">
+          {/* Indian National Tricolor Ribbon */}
+          <div className="mx-auto flex h-[3px] w-48 rounded-full overflow-hidden shadow">
+            <div className="h-full w-1/3 bg-[#FF9933]" />
+            <div className="h-full w-1/3 bg-[#FFFFFF]" />
+            <div className="h-full w-1/3 bg-[#138808]" />
+          </div>
+
+          <div className="inline-flex items-center space-x-2 text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
+            <span>🏛️ Govt. of India · भारत सरकार</span>
+            <span>|</span>
+            <span className="text-slate-300">Ministry of Development of North Eastern Region</span>
+          </div>
+
+          <div>
+            <div className="inline-flex items-center space-x-3 rounded-full border border-cyan-500/30 bg-cyan-950/40 px-4 py-1.5 backdrop-blur shadow-lg shadow-cyan-950/50">
+              <div className="relative flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 text-white shadow">
+                <Mountain className="h-3.5 w-3.5" />
+              </div>
+              <span className="font-mono text-xs font-black tracking-widest text-cyan-300">
+                NORTHLINK AI · NATIONAL DISASTER LOGISTICS GATEWAY
+              </span>
             </div>
-            <span className="font-mono text-xs font-black tracking-widest text-cyan-300">
-              NORTHLINK AI · SECURE ACCESS PORTAL
-            </span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             North Eastern Region Command & Logistics Gateway
           </h1>
-          <p className="mx-auto max-w-xl text-xs sm:text-sm text-slate-400">
-            AI-powered lifeline route optimization, landslide hazard monitoring, and multi-agency fleet coordination across 8 North Eastern states.
-          </p>
+
+          {/* DigiLocker-Style Security Badges (matches media_1789579885373.png) */}
+          <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] text-slate-300">
+            <span className="flex items-center space-x-1.5 text-emerald-400 font-medium">
+              <ShieldCheck className="h-4 w-4" />
+              <span>Govt. Verified Identity</span>
+            </span>
+            <span className="text-slate-600">·</span>
+            <span className="flex items-center space-x-1.5 text-cyan-400 font-medium">
+              <CheckCircle2 className="h-4 w-4" />
+              <span>Digital India Service</span>
+            </span>
+            <span className="text-slate-600">·</span>
+            <span className="flex items-center space-x-1.5 text-amber-400 font-medium">
+              <FileText className="h-4 w-4" />
+              <span>NDMA Manifest Compliant</span>
+            </span>
+          </div>
         </div>
 
         {/* Auth Grid */}

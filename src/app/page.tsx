@@ -11,7 +11,10 @@ import {
   FileText, 
   Sparkles, 
   ArrowRight,
-  ShieldAlert
+  ShieldAlert,
+  ShieldCheck,
+  CheckCircle2,
+  Building2
 } from 'lucide-react';
 import Link from 'next/link';
 import KpiCards from '@/components/dashboard/KpiCards';
@@ -107,40 +110,107 @@ export default function DashboardOverviewPage() {
 
   return (
     <div className="space-y-5 pb-12">
-      {/* Top Banner / Hero */}
-      <div className="flex flex-col justify-between rounded-2xl border border-slate-800 bg-gradient-to-r from-[#0b1324] via-[#09101d] to-[#070b13] p-5 lg:flex-row lg:items-center">
-        <div>
-          <div className="flex items-center space-x-2">
-            <span className="rounded bg-cyan-950 px-2 py-0.5 font-mono text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 border border-cyan-800/60">
-              Disaster Logistics Command
-            </span>
-            <span className="text-xs text-slate-400">|</span>
-            <span className="text-xs font-semibold text-slate-300">North Eastern Region of India (8 States)</span>
-          </div>
-          <h1 className="mt-1.5 text-2xl font-black tracking-tight text-white sm:text-3xl">
-            NORTHLINK AI <span className="text-cyan-400">Regional Intelligence Center</span>
-          </h1>
-          <p className="mt-1 text-xs text-slate-400 max-w-2xl">
-            Real-time geospatial monitoring, AI disruption prediction, terrain vulnerability modeling, and lifeline corridor rerouting across Assam, Meghalaya, Manipur, Mizoram, Nagaland, Tripura, Arunachal Pradesh, and Sikkim.
-          </p>
-        </div>
+      {/* Samsara & DigiLocker Inspired Operator-Grade Hero */}
+      <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-r from-[#0b1324] via-[#080e1b] to-[#060913] p-6 lg:p-7 shadow-2xl">
+        {/* Subtle background grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b0a_1px,transparent_1px),linear-gradient(to_bottom,#1e293b0a_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-        {/* Quick Action Buttons */}
-        <div className="mt-4 flex flex-wrap items-center gap-2.5 lg:mt-0">
-          <Link
-            href="/route-intelligence"
-            className="flex items-center space-x-2 rounded-lg bg-cyan-500 px-3.5 py-2 text-xs font-bold text-slate-950 transition-all hover:bg-cyan-400 shadow-lg shadow-cyan-950/60"
-          >
-            <Sparkles className="h-4 w-4" />
-            <span>AI Route Reroute Engine</span>
-          </Link>
-          <Link
-            href="/field-reports"
-            className="flex items-center space-x-2 rounded-lg border border-slate-700 bg-slate-900/90 px-3.5 py-2 text-xs font-semibold text-slate-200 transition-all hover:border-cyan-500 hover:text-white"
-          >
-            <FileText className="h-4 w-4 text-cyan-400" />
-            <span>Submit Field Report</span>
-          </Link>
+        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+          <div className="max-w-3xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded bg-cyan-950 px-2 py-0.5 font-mono text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 border border-cyan-800/60">
+                Disaster Logistics Command
+              </span>
+              <span className="text-xs text-slate-500">|</span>
+              <span className="text-xs font-semibold text-slate-300">North Eastern Region of India (8 States)</span>
+              <span className="rounded bg-emerald-950 px-1.5 py-0.2 text-[9px] font-bold text-emerald-300 border border-emerald-800">
+                PostGIS 3.3 Active
+              </span>
+            </div>
+
+            <h1 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-4xl">
+              OPERATOR GRADE. <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500">PROVEN IN THE FIELD.</span>
+            </h1>
+
+            <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl font-medium">
+              National Disaster Logistics & Geospatial Intelligence Command for the North Eastern Region. Built for emergency response operators, trusted to secure life-saving cold-chain and ration transit during catastrophic monsoon disruptions.
+            </p>
+
+            {/* DigiLocker-Style Security & Compliance Cues */}
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
+              <span className="flex items-center space-x-1 text-emerald-400 font-medium">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                <span>Govt. Verified (MDoNER & NIC)</span>
+              </span>
+              <span>·</span>
+              <span className="flex items-center space-x-1 text-cyan-400 font-medium">
+                <ShieldCheck className="h-3.5 w-3.5" />
+                <span>Real-Time GIS Spatial Engine</span>
+              </span>
+              <span>·</span>
+              <span className="flex items-center space-x-1 text-blue-400 font-medium">
+                <FileText className="h-3.5 w-3.5" />
+                <span>NDMA Digital Manifest Standard</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Samsara-Style Action CTAs */}
+          <div className="flex shrink-0 flex-wrap items-center gap-2.5 lg:flex-col lg:items-stretch">
+            <Link
+              href="/route-intelligence"
+              className="flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-xs font-black text-slate-950 transition-all hover:from-cyan-400 hover:to-blue-500 shadow-xl shadow-cyan-950/60 cursor-pointer"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>AI Route Reroute Engine</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+            <Link
+              href="/live-map"
+              className="flex items-center justify-center space-x-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2 text-xs font-bold text-slate-200 transition-all hover:border-cyan-500 hover:text-white cursor-pointer"
+            >
+              <MapIcon className="h-4 w-4 text-cyan-400" />
+              <span>Live GIS Cartography</span>
+            </Link>
+            <Link
+              href="/field-reports"
+              className="flex items-center justify-center space-x-2 rounded-xl border border-slate-800 bg-slate-950/80 px-4 py-1.5 text-xs font-medium text-slate-400 transition-all hover:border-slate-700 hover:text-slate-200"
+            >
+              <FileText className="h-3.5 w-3.5 text-slate-400" />
+              <span>Field Officer Submission</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Samsara-Style Institutional Partner Trust Strip */}
+      <div className="rounded-xl border border-slate-800/80 bg-[#060a14] px-4 py-2.5 shadow-md">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2.5 text-center md:text-left">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            Operational Disaster Command Network:
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-7 text-xs font-bold text-slate-300">
+            <span className="flex items-center space-x-1.5 text-slate-300 hover:text-white transition-colors">
+              <Building2 className="h-3.5 w-3.5 text-cyan-400" />
+              <span>NDMA India</span>
+            </span>
+            <span className="flex items-center space-x-1.5 text-slate-300 hover:text-white transition-colors">
+              <Building2 className="h-3.5 w-3.5 text-amber-400" />
+              <span>BRO Project Pushpak</span>
+            </span>
+            <span className="flex items-center space-x-1.5 text-slate-300 hover:text-white transition-colors">
+              <Building2 className="h-3.5 w-3.5 text-emerald-400" />
+              <span>MDoNER</span>
+            </span>
+            <span className="flex items-center space-x-1.5 text-slate-300 hover:text-white transition-colors">
+              <Building2 className="h-3.5 w-3.5 text-sky-400" />
+              <span>IAF Eastern Wing</span>
+            </span>
+            <span className="flex items-center space-x-1.5 text-slate-300 hover:text-white transition-colors">
+              <Building2 className="h-3.5 w-3.5 text-rose-400" />
+              <span>NDRF 1st Battalion</span>
+            </span>
+          </div>
         </div>
       </div>
 
