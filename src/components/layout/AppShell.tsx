@@ -8,21 +8,22 @@ import Header from './Header';
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isLoginPage = pathname === '/login';
+  const isDriverPage = pathname === '/driver';
 
-  if (isLoginPage) {
+  if (isLoginPage || isDriverPage) {
     return (
-      <div className="min-h-screen w-full overflow-y-auto bg-[#080c14]">
+      <div className="min-h-screen w-full overflow-y-auto">
         {children}
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#080c14]">
+    <div className="flex h-screen w-full overflow-hidden bg-[#f4f7fb]">
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-y-auto bg-[#080c14] p-6">
+        <main className="flex-1 overflow-y-auto bg-[#f4f7fb] p-5 lg:p-6">
           {children}
         </main>
       </div>
